@@ -18,7 +18,7 @@ export const Wrap = styled.div`
   max-width: 100%;
 
   @media (max-width: 1024px) {
-        padding: 0;
+        padding: 0.5rem;
     }
 `;
 

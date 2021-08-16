@@ -7,7 +7,7 @@ body {
   margin: 0;
   font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
   Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background: #F5F5F5;
+  background: hsl(0, 0%, 98%);
 }
 
 a {

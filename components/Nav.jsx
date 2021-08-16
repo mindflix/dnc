@@ -1,46 +1,83 @@
-import { useState } from "react"
-import styled from 'styled-components';
-import { Container, Wrap } from 'styles/globalComponents';
-import Button from './Button';
-import Hamburger from 'hamburger-react'
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Container, Wrap } from "styles/globalComponents";
+import Button from "./Button";
+import Hamburger from "hamburger-react";
 
+const links = [
+    {
+        name: "Accueil",
+        href: "/",
+    },
+    {
+        name: "À propos",
+        href: "/about",
+    },
+    {
+        name: "Services",
+        href: "/services",
+    },
+    {
+        name: "Contact",
+        href: "/contact",
+    },
+];
 
 const NavBar = styled.nav`
+    position: sticky;
+
     padding: 16px 36px;
     align-items: center;
     background: ${({ theme }) => theme.colors.white};
     box-shadow: 0 6px 16px #f0f3f4;
-    border-radius: 5px;
-`
+    border-radius: 16px;
+`;
 
 const NavContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     margin: 0 auto;
-`
+`;
 
-const NavMenu = styled.div`
+const NavHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 1024px) {
+        width: 100%;
+    }
+`;
+
+const StyledMenu = styled.div`
     display: flex;
     align-items: center;
     gap: 36px;
-    ul, li {
+    ul,
+    li {
+        padding: 0 0.5rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
         list-style: none;
-        gap: 36px;
+        @media (max-width: 1024px) {
+            padding: 0.5rem;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
     }
-    
     @media (max-width: 1024px) {
-        display: none;
+        gap: 0;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin: 0 auto 20px auto;
     }
-    `
+`;
 
 const StyledLink = styled.a`
     padding: 8px;
-    letter-spacing: .2rem;
-    font-size: .9rem;
+    letter-spacing: 0.2rem;
     text-decoration: none;
     text-transform: uppercase;
     color: hsl(0, 0%, 60%);
@@ -50,52 +87,72 @@ const StyledLink = styled.a`
     &:hover {
         color: hsl(0, 0%, 1%);
     }
-
-`
+`;
 
 const NavLogo = styled.div`
     font-size: 2.5rem;
-`
-
-
+`;
 
 export default function Nav() {
+    const [isDrawer, setDrawer] = useState(false);
+    const [isOpen, setOpen] = useState(false);
 
-    const [active, setActive] = useState(false)
+    useEffect(() => {
+        const handleSize = () => {
+            if (window.innerWidth <= 1024) {
+                setDrawer(true);
+                setOpen(false);
+            } else {
+                setDrawer(false);
+                setOpen(true);
+            }
+        };
+        handleSize();
+        window.addEventListener("resize", handleSize);
+        return () => window.removeEventListener("resize", handleSize);
+    }, []);
 
-    return <Wrap>
-        <NavBar>
-            <NavContainer>
-                <NavLogo>D&C</NavLogo>
-                {active ?
-                    <NavDrawer /> :
-                    <NavMenu>
-                        <ul>
-                            <li><NavLink>Accueil</NavLink></li>
-                            <li><NavLink>À propos</NavLink></li>
-                            <li><NavLink>Services</NavLink></li>
-                            <li><NavLink>Contact</NavLink></li>
-                        </ul>
-                        <Button>Faire un devis</Button>
-                    </NavMenu>
-
-                }
-            </NavContainer>
-        </NavBar>
-    </Wrap>
+    return (
+        <Wrap>
+            <NavBar>
+                <NavContainer>
+                    <NavHeader>
+                        <NavLogo>D&C</NavLogo>
+                        {isDrawer ? (
+                            <Hamburger
+                                toggled={isOpen}
+                                toggle={setOpen}
+                                size={32}
+                                rounded
+                            />
+                        ) : null}
+                    </NavHeader>
+                    {isOpen ? <NavMenu /> : null}
+                </NavContainer>
+            </NavBar>
+        </Wrap>
+    );
 }
 
-function NavLink(props) {
-
-    const handleHover = () => {
-        console.log(props.children)
-    }
-
-
-    return <StyledLink onMouseOver={handleHover}>{props.children}</StyledLink>
+function NavMenu() {
+    return (
+        <StyledMenu>
+            <NavLinks />
+            <Button>Nos projets</Button>
+        </StyledMenu>
+    );
 }
 
-
-function NavDrawer() {
-    return <div><Hamburger size={32} rounded /></div>
+function NavLinks() {
+    return (
+        <ul>
+            {links.map((link, index) => (
+                <li key={index}>
+                    <Link href={link.href}>
+                        <StyledLink>{link.name}</StyledLink>
+                    </Link>
+                </li>
+            ))}
+        </ul>
+    );
 }
