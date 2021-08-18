@@ -2,20 +2,46 @@ import styled from "styled-components";
 
 const Button = styled.button`
     display: flex;
-    padding: 12px 24px;
+    padding: 13px 24px 12px;
     font-size: 1rem;
-    border: 2px solid ${({ theme }) => theme.bg};
+    font-weight: bold;
+    border: 2px solid ${({ theme }) => theme.primary};
     border-radius: 8px;
-    background: ${({ theme }) => theme.bg};
-    color: ${({ theme }) => theme.colors.white};
+    background: transparent;
+    color: ${({ theme }) => theme.colors.primary};
+    z-index: 4;
+    background: ${({ theme }) => theme.background.primary};
     text-transform: uppercase;
-    transition-property: color, background;
-    transition-duration: 0.15s;
-    transition-timing-function: ease-out;
     cursor: pointer;
+    outline: 0;
+    transform: translate(0px, -3px);
+    letter-spacing: 0.2rem;
+    position: relative;
+    transition: color 0.25s ease-in-out;
+    transition: background 0.25s ease-in-out;
+    &::after {
+        z-index: -100;
+        pointer-events: none;
+        position: absolute;
+        transition: 0.25s ease-in-out;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border-top-right-radius: 8px;
+        content: "";
+        left: 7px;
+        top: 7px;
+        width: 100%;
+        height: 100%;
+        border-bottom: 2px solid #fff;
+        border-right: 2px solid #fff;
+    }
     &:hover {
-        color: black;
-        background: transparent;
+        border-color: ${({ theme }) => theme.colors.highlight};
+        background: ${({ theme }) => theme.colors.highlight};
+        &::after {
+            opacity: 0;
+            transform: translate(-7px, -7px);
+        }
     }
 `;
 

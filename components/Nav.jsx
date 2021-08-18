@@ -1,7 +1,7 @@
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import styled from "styled-components";
-import { Container, Wrap } from "styles/globalComponents";
+import px2vw from "utils/px2vw";
 import Button from "./Button";
 import Hamburger from "hamburger-react";
 
@@ -25,13 +25,12 @@ const links = [
 ];
 
 const NavBar = styled.nav`
-    position: sticky;
-
+    margin: ${px2vw(32)};
     padding: 16px 36px;
     align-items: center;
-    background: ${({ theme }) => theme.colors.white};
-    box-shadow: 0 6px 16px #f0f3f4;
     border-radius: 16px;
+    color: ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => theme.background.primary};
 `;
 
 const NavContainer = styled.div`
@@ -80,17 +79,21 @@ const StyledLink = styled.a`
     letter-spacing: 0.2rem;
     text-decoration: none;
     text-transform: uppercase;
-    color: hsl(0, 0%, 60%);
-    transition: color 150ms ease-out;
+    transition: color 0.25s ease-out;
     cursor: pointer;
 
     &:hover {
-        color: hsl(0, 0%, 1%);
+        color: ${({ theme }) => theme.colors.highlight};
     }
 `;
 
 const NavLogo = styled.div`
+    cursor: pointer;
+    transition: color 0.25s ease-out;
     font-size: 2.5rem;
+    &:hover {
+        color: ${({ theme }) => theme.colors.highlight};
+    }
 `;
 
 export default function Nav() {
@@ -113,24 +116,22 @@ export default function Nav() {
     }, []);
 
     return (
-        <Wrap>
-            <NavBar>
-                <NavContainer>
-                    <NavHeader>
-                        <NavLogo>D&C</NavLogo>
-                        {isDrawer ? (
-                            <Hamburger
-                                toggled={isOpen}
-                                toggle={setOpen}
-                                size={32}
-                                rounded
-                            />
-                        ) : null}
-                    </NavHeader>
-                    {isOpen ? <NavMenu /> : null}
-                </NavContainer>
-            </NavBar>
-        </Wrap>
+        <NavBar>
+            <NavContainer>
+                <NavHeader>
+                    <NavLogo>D&C</NavLogo>
+                    {isDrawer ? (
+                        <Hamburger
+                            toggled={isOpen}
+                            toggle={setOpen}
+                            size={32}
+                            rounded
+                        />
+                    ) : null}
+                </NavHeader>
+                {isOpen ? <NavMenu /> : null}
+            </NavContainer>
+        </NavBar>
     );
 }
 
